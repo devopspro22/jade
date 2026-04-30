@@ -23,9 +23,9 @@ function doGet(e) {
       }
     }
 
-    // Sync customers from Powerlink API (server-side, no CORS issues)
     if (params.action === 'syncPowerlink') {
-      const token = 'd7e7dda4-c054-4545-b951-1a3d5a393c07';
+      const token = PropertiesService.getScriptProperties().getProperty('FIREBERRY_TOKEN');
+      if (!token) throw new Error('FIREBERRY_TOKEN לא הוגדר ב-Script Properties');
       const apiUrl = 'https://api.powerlink.co.il/api/query';
       var allRecords = [];
       var pageNumber = 1;
