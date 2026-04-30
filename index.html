@@ -1,0 +1,1566 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Feature Requests</title>
+<style>
+/* ===== RESET & BASE ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --blue:       #2563eb;
+  --blue-dark:  #1d4ed8;
+  --blue-light: #eff6ff;
+  --blue-pale:  #dbeafe;
+  --green:      #16a34a;
+  --green-bg:   #dcfce7;
+  --yellow:     #ca8a04;
+  --yellow-bg:  #fef9c3;
+  --red:        #dc2626;
+  --red-bg:     #fee2e2;
+  --purple:     #7c3aed;
+  --purple-bg:  #ede9fe;
+  --gray-50:    #f9fafb;
+  --gray-100:   #f3f4f6;
+  --gray-200:   #e5e7eb;
+  --gray-300:   #d1d5db;
+  --gray-400:   #9ca3af;
+  --gray-500:   #6b7280;
+  --gray-600:   #4b5563;
+  --gray-700:   #374151;
+  --gray-800:   #1f2937;
+  --gray-900:   #111827;
+  --white:      #ffffff;
+  --shadow-sm:  0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.04);
+  --shadow-md:  0 4px 12px rgba(0,0,0,.08), 0 2px 4px rgba(0,0,0,.04);
+  --shadow-lg:  0 10px 30px rgba(0,0,0,.1);
+  --radius:     10px;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: var(--gray-100);
+  color: var(--gray-800);
+  font-size: 14px;
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+/* ===== LOGIN ===== */
+#login-screen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+  background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 100%);
+}
+
+.login-card {
+  background: var(--white);
+  border-radius: 20px;
+  padding: 48px 40px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: var(--shadow-lg);
+  text-align: center;
+}
+
+.login-logo {
+  width: 64px;
+  height: 64px;
+  background: var(--blue);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  font-size: 28px;
+}
+
+.login-card h1 {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--gray-900);
+  margin-bottom: 6px;
+}
+
+.login-card p {
+  color: var(--gray-500);
+  font-size: 14px;
+  margin-bottom: 32px;
+}
+
+.login-card .field { margin-bottom: 16px; text-align: right; }
+.login-card .field label { display: block; font-size: 13px; font-weight: 600; color: var(--gray-700); margin-bottom: 6px; }
+.login-card .field input {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1.5px solid var(--gray-300);
+  border-radius: 8px;
+  font-size: 14px;
+  transition: border-color .15s;
+  direction: ltr;
+  text-align: left;
+}
+.login-card .field input:focus { outline: none; border-color: var(--blue); }
+.login-card .field input[type="text"] { direction: rtl; text-align: right; }
+
+.btn-login {
+  width: 100%;
+  padding: 13px;
+  background: var(--blue);
+  color: var(--white);
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: background .15s, transform .1s;
+}
+.btn-login:hover { background: var(--blue-dark); }
+.btn-login:active { transform: scale(.99); }
+
+#login-error {
+  color: var(--red);
+  font-size: 13px;
+  margin-top: 10px;
+  display: none;
+}
+
+/* ===== APP SHELL ===== */
+#app-container { display: none; min-height: 100vh; }
+
+.topbar {
+  background: var(--white);
+  border-bottom: 1px solid var(--gray-200);
+  padding: 0 24px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: var(--shadow-sm);
+}
+
+.topbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--gray-900);
+}
+
+.topbar-brand-icon {
+  width: 34px;
+  height: 34px;
+  background: var(--blue);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: var(--white);
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.topbar-user {
+  font-size: 13px;
+  color: var(--gray-500);
+}
+
+.btn-logout {
+  padding: 7px 14px;
+  border: 1.5px solid var(--gray-300);
+  background: var(--white);
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gray-600);
+  cursor: pointer;
+  transition: all .15s;
+}
+.btn-logout:hover { border-color: var(--red); color: var(--red); }
+
+/* ===== NAV TABS ===== */
+.nav-tabs {
+  background: var(--white);
+  border-bottom: 1px solid var(--gray-200);
+  padding: 0 24px;
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+}
+
+.nav-tab {
+  padding: 14px 18px;
+  border: none;
+  background: none;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--gray-500);
+  cursor: pointer;
+  border-bottom: 2.5px solid transparent;
+  white-space: nowrap;
+  transition: color .15s, border-color .15s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.nav-tab:hover { color: var(--gray-800); }
+.nav-tab.active { color: var(--blue); border-bottom-color: var(--blue); }
+
+.tab-badge {
+  background: var(--blue-pale);
+  color: var(--blue);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 20px;
+  min-width: 20px;
+  text-align: center;
+}
+.nav-tab.active .tab-badge { background: var(--blue); color: var(--white); }
+
+/* ===== MAIN CONTENT ===== */
+.main { padding: 24px; max-width: 1300px; margin: 0 auto; }
+
+.panel { display: none; }
+.panel.active { display: block; }
+
+/* ===== CARDS ===== */
+.card {
+  background: var(--white);
+  border-radius: var(--radius);
+  border: 1px solid var(--gray-200);
+  box-shadow: var(--shadow-sm);
+}
+
+.card-header {
+  padding: 18px 22px;
+  border-bottom: 1px solid var(--gray-100);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--gray-900);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.card-body { padding: 22px; }
+
+/* ===== STAT CARDS ===== */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  border: 1px solid var(--gray-200);
+  padding: 20px 22px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.stat-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  flex-shrink: 0;
+}
+.stat-icon.blue   { background: var(--blue-pale);   }
+.stat-icon.green  { background: var(--green-bg);     }
+.stat-icon.yellow { background: var(--yellow-bg);    }
+.stat-icon.purple { background: var(--purple-bg);    }
+
+.stat-info { min-width: 0; }
+.stat-number { font-size: 28px; font-weight: 800; color: var(--gray-900); line-height: 1; }
+.stat-label  { font-size: 12px; color: var(--gray-500); margin-top: 4px; font-weight: 500; }
+
+/* ===== TOP FEATURES BAR CHART ===== */
+.top-features-list { display: flex; flex-direction: column; gap: 10px; }
+
+.feat-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.feat-bar-label {
+  width: 180px;
+  min-width: 120px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gray-700);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex-shrink: 0;
+}
+.feat-bar-track {
+  flex: 1;
+  background: var(--gray-100);
+  border-radius: 20px;
+  height: 22px;
+  overflow: hidden;
+}
+.feat-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--blue) 0%, #60a5fa 100%);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 10px;
+  transition: width .5s ease;
+}
+.feat-bar-fill span { font-size: 11px; font-weight: 700; color: var(--white); }
+.feat-bar-count { font-size: 12px; color: var(--gray-500); min-width: 60px; text-align: center; }
+
+/* ===== FORMS ===== */
+.form-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  margin-bottom: 16px;
+}
+
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex: 1;
+  min-width: 150px;
+}
+
+.field-group label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--gray-600);
+  text-transform: uppercase;
+  letter-spacing: .03em;
+}
+
+.field-group input,
+.field-group select,
+.field-group textarea {
+  padding: 9px 12px;
+  border: 1.5px solid var(--gray-300);
+  border-radius: 7px;
+  font-size: 14px;
+  font-family: inherit;
+  transition: border-color .15s;
+  background: var(--white);
+  color: var(--gray-800);
+  direction: rtl;
+}
+
+.field-group input:focus,
+.field-group select:focus,
+.field-group textarea:focus {
+  outline: none;
+  border-color: var(--blue);
+}
+
+.field-group textarea { resize: vertical; min-height: 70px; }
+
+/* ===== BUTTONS ===== */
+.btn {
+  padding: 9px 18px;
+  border: none;
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all .15s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+.btn-primary   { background: var(--blue);  color: var(--white); }
+.btn-primary:hover { background: var(--blue-dark); }
+.btn-success   { background: var(--green); color: var(--white); }
+.btn-danger    { background: var(--red);   color: var(--white); }
+.btn-secondary { background: var(--gray-100); color: var(--gray-700); border: 1px solid var(--gray-300); }
+.btn-secondary:hover { background: var(--gray-200); }
+.btn-sm { padding: 5px 10px; font-size: 12px; }
+.btn-icon { padding: 6px 8px; background: none; border: 1px solid var(--gray-200); color: var(--gray-500); border-radius: 6px; cursor: pointer; font-size: 14px; transition: all .15s; }
+.btn-icon:hover { background: var(--gray-100); color: var(--gray-800); }
+.btn-icon.danger:hover { background: var(--red-bg); border-color: var(--red); color: var(--red); }
+
+/* ===== TABLE ===== */
+.table-wrap { overflow-x: auto; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+}
+
+thead th {
+  background: var(--gray-50);
+  padding: 10px 14px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  color: var(--gray-500);
+  border-bottom: 1px solid var(--gray-200);
+  white-space: nowrap;
+  text-align: right;
+}
+
+tbody td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--gray-100);
+  vertical-align: middle;
+  color: var(--gray-700);
+}
+
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover { background: var(--gray-50); }
+
+.td-actions { display: flex; gap: 6px; justify-content: flex-end; }
+
+.no-data {
+  text-align: center;
+  padding: 48px 20px;
+  color: var(--gray-400);
+  font-size: 14px;
+}
+.no-data-icon { font-size: 40px; display: block; margin-bottom: 10px; }
+
+/* ===== BADGES ===== */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 9px;
+  border-radius: 20px;
+  font-size: 11.5px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.badge-idea        { background: var(--gray-100);   color: var(--gray-600); }
+.badge-review      { background: var(--yellow-bg);  color: var(--yellow);   }
+.badge-development { background: var(--blue-pale);  color: var(--blue);     }
+.badge-done        { background: var(--green-bg);   color: var(--green);    }
+.badge-rejected    { background: var(--red-bg);     color: var(--red);      }
+
+.priority-dot {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.dot-1 { background: var(--gray-300); }
+.dot-2 { background: #60a5fa; }
+.dot-3 { background: var(--yellow); }
+.dot-4 { background: #f97316; }
+.dot-5 { background: var(--red); }
+
+/* ===== MODAL ===== */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.45);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.modal-overlay.active { display: flex; }
+
+.modal {
+  background: var(--white);
+  border-radius: 14px;
+  width: 100%;
+  max-width: 480px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-lg);
+}
+.modal-header {
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid var(--gray-100);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.modal-header h3 { font-size: 16px; font-weight: 700; color: var(--gray-900); }
+.modal-close { background: none; border: none; font-size: 20px; cursor: pointer; color: var(--gray-400); line-height: 1; padding: 0; }
+.modal-close:hover { color: var(--gray-800); }
+.modal-body { padding: 20px 24px; }
+.modal-footer {
+  padding: 16px 24px;
+  border-top: 1px solid var(--gray-100);
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* ===== CHECKBOX LIST ===== */
+.checkbox-list {
+  max-height: 260px;
+  overflow-y: auto;
+  border: 1.5px solid var(--gray-200);
+  border-radius: 8px;
+  padding: 6px;
+}
+.cb-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background .1s;
+}
+.cb-item:hover { background: var(--gray-50); }
+.cb-item input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--blue); }
+.cb-item label { font-size: 13.5px; cursor: pointer; color: var(--gray-700); }
+
+/* ===== SYNC BAR ===== */
+.sync-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  background: var(--blue-light);
+  border: 1px solid var(--blue-pale);
+  border-radius: var(--radius);
+  padding: 12px 18px;
+  margin-bottom: 16px;
+}
+.sync-bar-info { font-size: 13px; color: var(--blue-dark); }
+.sync-time { font-size: 12px; color: var(--gray-500); margin-top: 2px; }
+
+/* ===== CUSTOMER TAGS ===== */
+.tags { display: flex; flex-wrap: wrap; gap: 4px; }
+.tag {
+  background: var(--blue-pale);
+  color: var(--blue-dark);
+  font-size: 11px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+/* ===== MOBILE CARDS ===== */
+.mobile-cards { display: none; }
+
+@media (max-width: 640px) {
+  .main { padding: 12px; }
+  .nav-tabs { padding: 0 12px; }
+  .nav-tab { padding: 12px 10px; font-size: 12px; }
+  .topbar { padding: 0 14px; }
+  .card-body { padding: 14px; }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .stat-number { font-size: 22px; }
+  .feat-bar-label { width: 100px; min-width: 80px; }
+  .table-wrap table { display: none; }
+  .mobile-cards { display: block; }
+  .form-row { flex-direction: column; }
+  .field-group { min-width: 0; width: 100%; }
+}
+
+/* ===== EMPTY STATE ===== */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+}
+.empty-state-icon { font-size: 48px; margin-bottom: 12px; }
+.empty-state-title { font-size: 16px; font-weight: 700; color: var(--gray-700); margin-bottom: 6px; }
+.empty-state-text { font-size: 13px; color: var(--gray-400); }
+
+/* ===== SEARCH ===== */
+.search-bar {
+  position: relative;
+  flex: 1;
+  min-width: 180px;
+  max-width: 280px;
+}
+.search-bar input {
+  width: 100%;
+  padding: 8px 12px 8px 34px;
+  border: 1.5px solid var(--gray-300);
+  border-radius: 7px;
+  font-size: 13px;
+  direction: rtl;
+}
+.search-bar input:focus { outline: none; border-color: var(--blue); }
+.search-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--gray-400);
+  font-size: 13px;
+  pointer-events: none;
+}
+</style>
+</head>
+<body>
+
+<!-- ====== LOGIN ====== -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-logo">💡</div>
+    <h1>Feature Requests</h1>
+    <p>התחבר כדי לנהל את בקשות הפיצ'רים</p>
+
+    <div class="field">
+      <label>אימייל</label>
+      <input type="text" id="login-email" placeholder="your@email.com" autocomplete="username">
+    </div>
+    <div class="field">
+      <label>סיסמה</label>
+      <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password">
+    </div>
+    <button class="btn-login" id="login-btn" onclick="login()">התחבר</button>
+    <div id="login-error"></div>
+  </div>
+</div>
+
+<!-- ====== APP ====== -->
+<div id="app-container">
+
+  <!-- Topbar -->
+  <div class="topbar">
+    <div class="topbar-brand">
+      <div class="topbar-brand-icon">💡</div>
+      Feature Requests
+    </div>
+    <div class="topbar-right">
+      <span class="topbar-user" id="topbar-user"></span>
+      <button class="btn-logout" onclick="logout()">🚪 התנתק</button>
+    </div>
+  </div>
+
+  <!-- Nav Tabs -->
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="showTab('dashboard')">📊 דשבורד</button>
+    <button class="nav-tab" onclick="showTab('features')">💡 פיצ'רים <span class="tab-badge" id="badge-features">0</span></button>
+    <button class="nav-tab" onclick="showTab('customers')">👥 לקוחות <span class="tab-badge" id="badge-customers">0</span></button>
+    <button class="nav-tab" onclick="showTab('requests')">📋 בקשות <span class="tab-badge" id="badge-requests">0</span></button>
+  </div>
+
+  <!-- Main -->
+  <div class="main">
+
+    <!-- ====== DASHBOARD ====== -->
+    <div id="dashboard" class="panel active">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon blue">💡</div>
+          <div class="stat-info">
+            <div class="stat-number" id="stat-features">0</div>
+            <div class="stat-label">פיצ'רים</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon green">👥</div>
+          <div class="stat-info">
+            <div class="stat-number" id="stat-customers">0</div>
+            <div class="stat-label">לקוחות</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon yellow">📋</div>
+          <div class="stat-info">
+            <div class="stat-number" id="stat-requests">0</div>
+            <div class="stat-label">בקשות</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon purple">🚧</div>
+          <div class="stat-info">
+            <div class="stat-number" id="stat-dev">0</div>
+            <div class="stat-label">בפיתוח</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">🔥 פיצ'רים מבוקשים ביותר</div>
+        </div>
+        <div class="card-body">
+          <div class="top-features-list" id="top-features-chart">
+            <div class="empty-state">
+              <div class="empty-state-icon">📊</div>
+              <div class="empty-state-title">אין עדיין נתונים</div>
+              <div class="empty-state-text">הוסף פיצ'רים ובקשות כדי לראות את הגרף</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ====== FEATURES ====== -->
+    <div id="features" class="panel">
+
+      <!-- Add form -->
+      <div class="card" style="margin-bottom:16px">
+        <div class="card-header">
+          <div class="card-title">➕ הוסף פיצ'ר חדש</div>
+        </div>
+        <div class="card-body">
+          <div class="form-row">
+            <div class="field-group" style="flex:2; min-width:200px">
+              <label>שם הפיצ'ר</label>
+              <input type="text" id="feat-name" placeholder="שם הפיצ'ר...">
+            </div>
+            <div class="field-group">
+              <label>סטטוס</label>
+              <select id="feat-status">
+                <option value="idea">💡 רעיון</option>
+                <option value="review">🔍 בבחינה</option>
+                <option value="development">🚧 בפיתוח</option>
+                <option value="done">✅ הושלם</option>
+                <option value="rejected">❌ נדחה</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <label>קטגוריה</label>
+              <select id="feat-category">
+                <option value="ux">UX</option>
+                <option value="integrations">אינטגרציות</option>
+                <option value="reports">דוחות</option>
+                <option value="automation">אוטומציה</option>
+                <option value="other">אחר</option>
+              </select>
+            </div>
+            <div style="padding-bottom:1px">
+              <button class="btn btn-primary" onclick="addFeature()">➕ הוסף</button>
+            </div>
+          </div>
+          <div class="form-row" style="margin-bottom:0">
+            <div class="field-group" style="flex:1">
+              <label>תיאור (אופציונלי)</label>
+              <textarea id="feat-desc" rows="2" placeholder="תיאור קצר..."></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">רשימת פיצ'רים</div>
+          <div class="search-bar">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="search-features" placeholder="חיפוש..." oninput="renderFeatures()">
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>שם הפיצ'ר</th>
+                <th>תיאור</th>
+                <th>סטטוס</th>
+                <th>קטגוריה</th>
+                <th>לקוחות מבקשים</th>
+                <th style="text-align:left">פעולות</th>
+              </tr>
+            </thead>
+            <tbody id="features-table"></tbody>
+          </table>
+          <div id="features-mobile" class="mobile-cards"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ====== CUSTOMERS ====== -->
+    <div id="customers" class="panel">
+      <div class="sync-bar">
+        <div>
+          <div class="sync-bar-info">🔄 סנכרון לקוחות מ-Fireberry CRM</div>
+          <div class="sync-time" id="sync-info">טרם בוצע סנכרון</div>
+        </div>
+        <button class="btn btn-primary" id="sync-btn" onclick="syncCustomers()">🔄 סנכרון מ-Fireberry</button>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">רשימת לקוחות</div>
+          <div class="search-bar">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="search-customers" placeholder="חיפוש..." oninput="renderCustomers()">
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>שם</th>
+                <th>טלפון</th>
+                <th>אימייל</th>
+                <th>מס' לקוח</th>
+                <th>מקור</th>
+                <th>פיצ'רים</th>
+              </tr>
+            </thead>
+            <tbody id="customers-table"></tbody>
+          </table>
+          <div id="customers-mobile" class="mobile-cards"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ====== REQUESTS ====== -->
+    <div id="requests" class="panel">
+
+      <!-- Add form -->
+      <div class="card" style="margin-bottom:16px">
+        <div class="card-header">
+          <div class="card-title">➕ קשר בקשה חדשה</div>
+        </div>
+        <div class="card-body">
+          <div class="form-row">
+            <div class="field-group" style="flex:2; min-width:200px">
+              <label>לקוח</label>
+              <input type="text" id="req-customer-input" list="req-customer-list" placeholder="חפש לקוח..." oninput="onCustomerInput()">
+              <datalist id="req-customer-list"></datalist>
+              <input type="hidden" id="req-customer">
+            </div>
+            <div class="field-group" style="flex:2; min-width:200px">
+              <label>פיצ'ר</label>
+              <select id="req-feature"><option value="">בחר פיצ'ר...</option></select>
+            </div>
+            <div class="field-group">
+              <label>עדיפות</label>
+              <select id="req-priority">
+                <option value="1">1 — נמוכה</option>
+                <option value="2">2</option>
+                <option value="3" selected>3 — בינונית</option>
+                <option value="4">4</option>
+                <option value="5">5 — קריטית</option>
+              </select>
+            </div>
+            <div style="padding-bottom:1px">
+              <button class="btn btn-primary" onclick="addRequest()">➕ הוסף</button>
+            </div>
+          </div>
+          <div class="form-row" style="margin-bottom:0">
+            <div class="field-group" style="flex:1">
+              <label>הערות (אופציונלי)</label>
+              <input type="text" id="req-notes" placeholder="הערה קצרה...">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">רשימת בקשות</div>
+          <div class="search-bar">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="search-requests" placeholder="חיפוש..." oninput="renderRequests()">
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>לקוח</th>
+                <th>פיצ'ר</th>
+                <th>עדיפות</th>
+                <th>תאריך</th>
+                <th>הערות</th>
+                <th style="text-align:left">פעולות</th>
+              </tr>
+            </thead>
+            <tbody id="requests-table"></tbody>
+          </table>
+          <div id="requests-mobile" class="mobile-cards"></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /main -->
+</div><!-- /app -->
+
+<!-- ====== MODALS ====== -->
+
+<!-- Edit Feature -->
+<div class="modal-overlay" id="modal-edit-feature">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>✏️ עריכת פיצ'ר</h3>
+      <button class="modal-close" onclick="closeModal('modal-edit-feature')">×</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="ef-id">
+      <div class="form-row" style="flex-direction:column; gap:14px">
+        <div class="field-group">
+          <label>שם הפיצ'ר</label>
+          <input type="text" id="ef-name">
+        </div>
+        <div class="field-group">
+          <label>תיאור</label>
+          <textarea id="ef-desc"></textarea>
+        </div>
+        <div class="field-group">
+          <label>סטטוס</label>
+          <select id="ef-status">
+            <option value="idea">💡 רעיון</option>
+            <option value="review">🔍 בבחינה</option>
+            <option value="development">🚧 בפיתוח</option>
+            <option value="done">✅ הושלם</option>
+            <option value="rejected">❌ נדחה</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label>קטגוריה</label>
+          <select id="ef-category">
+            <option value="ux">UX</option>
+            <option value="integrations">אינטגרציות</option>
+            <option value="reports">דוחות</option>
+            <option value="automation">אוטומציה</option>
+            <option value="other">אחר</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modal-edit-feature')">ביטול</button>
+      <button class="btn btn-primary" onclick="saveEditFeature()">שמור שינויים</button>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Request -->
+<div class="modal-overlay" id="modal-edit-request">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>✏️ עריכת בקשה</h3>
+      <button class="modal-close" onclick="closeModal('modal-edit-request')">×</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="er-id">
+      <div class="form-row" style="flex-direction:column; gap:14px">
+        <div class="field-group">
+          <label>לקוח</label>
+          <input type="text" id="er-customer-name" disabled style="background:var(--gray-100)">
+        </div>
+        <div class="field-group">
+          <label>פיצ'ר</label>
+          <select id="er-feature"></select>
+        </div>
+        <div class="field-group">
+          <label>עדיפות</label>
+          <select id="er-priority">
+            <option value="1">1 — נמוכה</option>
+            <option value="2">2</option>
+            <option value="3">3 — בינונית</option>
+            <option value="4">4</option>
+            <option value="5">5 — קריטית</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label>הערות</label>
+          <input type="text" id="er-notes">
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modal-edit-request')">ביטול</button>
+      <button class="btn btn-primary" onclick="saveEditRequest()">שמור שינויים</button>
+    </div>
+  </div>
+</div>
+
+<!-- Assign Customers to Feature -->
+<div class="modal-overlay" id="modal-assign">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>👥 שיוך לקוחות לפיצ'ר</h3>
+      <button class="modal-close" onclick="closeModal('modal-assign')">×</button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:13px; color:var(--gray-600); margin-bottom:14px" id="assign-feature-name"></p>
+      <div class="checkbox-list" id="assign-cb-list"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modal-assign')">ביטול</button>
+      <button class="btn btn-primary" onclick="saveAssignments()">שמור</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== CONFIG =====
+const SCRIPT_URL  = 'https://script.google.com/macros/s/AKfycbwixix2W8wMBWiBsf7zjo1-owDCfDczcZMgLkPq7eF5XHvCIi_ftW8gG15jIiPlglUUNQ/exec';
+const CORS_PROXY  = 'https://api.codetabs.com/v1/proxy?quest=';
+
+// ===== STATE =====
+let customers = [];
+let features  = [];
+let requests  = [];
+let syncTime  = null;
+let assignFeatId = null;
+
+const STATUS_LABELS = {
+  idea:'💡 רעיון', review:'🔍 בבחינה',
+  development:'🚧 בפיתוח', done:'✅ הושלם', rejected:'❌ נדחה'
+};
+const CAT_LABELS = {
+  ux:'UX', integrations:'אינטגרציות', reports:'דוחות',
+  automation:'אוטומציה', other:'אחר'
+};
+const PRIORITY_LABELS = { 1:'נמוכה', 2:'', 3:'בינונית', 4:'', 5:'קריטית' };
+
+// ===== HELPERS =====
+function uid(prefix) {
+  return prefix + '_' + Date.now() + '_' + Math.random().toString(36).slice(2,7);
+}
+function esc(str) {
+  return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove('active');
+}
+
+// ===== GOOGLE SHEETS =====
+async function gsFetch(url) {
+  try {
+    const r = await fetch(url);
+    return await r.json();
+  } catch {
+    const r = await fetch(CORS_PROXY + encodeURIComponent(url));
+    return await r.json();
+  }
+}
+function gsPost(payload) {
+  if (SCRIPT_URL.includes('YOUR_SCRIPT_ID')) return;
+  const opts = { method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify(payload) };
+  fetch(SCRIPT_URL, opts).catch(() =>
+    fetch(CORS_PROXY + encodeURIComponent(SCRIPT_URL), opts).catch(console.error)
+  );
+}
+
+// ===== PERSIST =====
+function saveLocal() {
+  localStorage.setItem('fr_features',  JSON.stringify(features));
+  localStorage.setItem('fr_customers', JSON.stringify(customers));
+  localStorage.setItem('fr_requests',  JSON.stringify(requests));
+  localStorage.setItem('fr_syncTime',  syncTime||'');
+}
+function loadLocal() {
+  try {
+    features  = JSON.parse(localStorage.getItem('fr_features')  || '[]');
+    customers = JSON.parse(localStorage.getItem('fr_customers') || '[]');
+    requests  = JSON.parse(localStorage.getItem('fr_requests')  || '[]');
+    syncTime  = localStorage.getItem('fr_syncTime') || null;
+  } catch { features=[]; customers=[]; requests=[]; }
+}
+async function syncFromServer() {
+  if (SCRIPT_URL.includes('YOUR_SCRIPT_ID')) return;
+  try {
+    const res = await gsFetch(SCRIPT_URL);
+    if (res.success) {
+      features  = res.data.features  || features;
+      customers = res.data.customers || customers;
+      requests  = res.data.requests  || requests;
+      syncTime  = res.data.lastSync  || syncTime;
+      saveLocal();
+      renderAll();
+    }
+  } catch { console.log('Server sync unavailable, using local data'); }
+}
+
+// ===== AUTH =====
+function login() {
+  const email = document.getElementById('login-email').value.trim();
+  const pass  = document.getElementById('login-password').value;
+  const err   = document.getElementById('login-error');
+  const btn   = document.getElementById('login-btn');
+  if (!email || !pass) { err.textContent='נא למלא אימייל וסיסמה'; err.style.display='block'; return; }
+
+  if (SCRIPT_URL.includes('YOUR_SCRIPT_ID')) {
+    // Demo login
+    sessionStorage.setItem('fr_user', email);
+    showApp(email);
+    return;
+  }
+
+  btn.disabled = true; btn.textContent = 'מתחבר...'; err.style.display='none';
+  const url = SCRIPT_URL + '?action=login&mail=' + encodeURIComponent(email) + '&password=' + encodeURIComponent(pass);
+  gsFetch(url).then(res => {
+    if (res.success) { sessionStorage.setItem('fr_user', email); showApp(email); }
+    else { err.textContent = res.error || 'אימייל או סיסמה שגויים'; err.style.display='block'; }
+  }).catch(e => { err.textContent='שגיאת תקשורת: ' + e.message; err.style.display='block'; })
+  .finally(() => { btn.disabled=false; btn.textContent='התחבר'; });
+}
+
+function logout() {
+  sessionStorage.removeItem('fr_user');
+  document.getElementById('app-container').style.display = 'none';
+  document.getElementById('login-screen').style.display  = 'flex';
+  document.getElementById('login-password').value = '';
+}
+
+function showApp(email) {
+  document.getElementById('login-screen').style.display  = 'none';
+  document.getElementById('app-container').style.display = 'block';
+  document.getElementById('topbar-user').textContent     = email;
+  loadLocal();
+  renderAll();
+  syncFromServer();
+}
+
+document.getElementById('login-password').addEventListener('keydown', e => { if (e.key==='Enter') login(); });
+document.getElementById('login-email').addEventListener('keydown',    e => { if (e.key==='Enter') login(); });
+
+// ===== TAB NAV =====
+function showTab(name) {
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelector(`.nav-tab[onclick="showTab('${name}')"]`).classList.add('active');
+  document.getElementById(name).classList.add('active');
+}
+
+// ===== RENDER ALL =====
+function renderAll() {
+  renderDashboard();
+  renderFeatures();
+  renderCustomers();
+  renderRequests();
+  populateSelects();
+  updateBadges();
+}
+
+function updateBadges() {
+  document.getElementById('badge-features').textContent  = features.length;
+  document.getElementById('badge-customers').textContent = customers.length;
+  document.getElementById('badge-requests').textContent  = requests.length;
+}
+
+// ===== DASHBOARD =====
+function renderDashboard() {
+  document.getElementById('stat-features').textContent  = features.length;
+  document.getElementById('stat-customers').textContent = customers.length;
+  document.getElementById('stat-requests').textContent  = requests.length;
+  document.getElementById('stat-dev').textContent       = features.filter(f=>f.status==='development').length;
+
+  const ranked = features.map(f => ({
+    ...f,
+    cnt: requests.filter(r=>r.featureId===f.id).length,
+    score: requests.filter(r=>r.featureId===f.id).reduce((s,r)=>s+r.priority,0)
+  })).filter(f=>f.cnt>0).sort((a,b)=>b.score-a.score).slice(0,6);
+
+  const maxScore = Math.max(...ranked.map(f=>f.score), 1);
+  const chart = document.getElementById('top-features-chart');
+
+  if (!ranked.length) {
+    chart.innerHTML = `<div class="empty-state"><div class="empty-state-icon">📊</div><div class="empty-state-title">אין עדיין נתונים</div><div class="empty-state-text">הוסף פיצ'רים ובקשות כדי לראות את הגרף</div></div>`;
+    return;
+  }
+
+  chart.innerHTML = ranked.map(f => `
+    <div class="feat-bar-row">
+      <div class="feat-bar-label" title="${esc(f.name)}">${esc(f.name)}</div>
+      <div class="feat-bar-track">
+        <div class="feat-bar-fill" style="width:${Math.round(f.score/maxScore*100)}%">
+          <span>${f.score}</span>
+        </div>
+      </div>
+      <div class="feat-bar-count">${f.cnt} לקוח${f.cnt!==1?'ות':''}</div>
+    </div>`).join('');
+}
+
+// ===== STATUS BADGE =====
+function statusBadge(s) {
+  const map = { idea:'badge-idea', review:'badge-review', development:'badge-development', done:'badge-done', rejected:'badge-rejected' };
+  return `<span class="badge ${map[s]||'badge-idea'}">${STATUS_LABELS[s]||s}</span>`;
+}
+function priorityBadge(p) {
+  const colors = { 1:'dot-1', 2:'dot-2', 3:'dot-3', 4:'dot-4', 5:'dot-5' };
+  const labels = { 1:'נמוכה', 2:'', 3:'בינונית', 4:'גבוהה', 5:'קריטית' };
+  return `<span class="priority-dot"><span class="dot ${colors[p]||'dot-3'}"></span> ${p}${labels[p]?' — '+labels[p]:''}</span>`;
+}
+
+// ===== FEATURES =====
+function renderFeatures() {
+  const q = (document.getElementById('search-features')?.value||'').toLowerCase();
+  const list = features.filter(f => !q || f.name.toLowerCase().includes(q) || (f.description||'').toLowerCase().includes(q));
+  const tbody = document.getElementById('features-table');
+  const mobile = document.getElementById('features-mobile');
+
+  if (!list.length) {
+    const empty = `<div class="no-data"><span class="no-data-icon">💡</span>${features.length?'לא נמצאו תוצאות':'עדיין אין פיצ\'רים — הוסף את הראשון!'}</div>`;
+    tbody.innerHTML  = `<tr><td colspan="6">${empty}</td></tr>`;
+    mobile.innerHTML = empty;
+    return;
+  }
+
+  tbody.innerHTML = list.map(f => {
+    const reqs = requests.filter(r=>r.featureId===f.id);
+    const names = reqs.map(r=>{ const c=customers.find(c=>c.id===r.customerId); return c?c.name:''; }).filter(Boolean);
+    return `<tr>
+      <td><strong>${esc(f.name)}</strong></td>
+      <td style="max-width:220px; color:var(--gray-500)">${esc(f.description||'—')}</td>
+      <td>${statusBadge(f.status)}</td>
+      <td><span class="badge" style="background:var(--gray-100);color:var(--gray-600)">${CAT_LABELS[f.category]||f.category}</span></td>
+      <td>
+        <div class="tags">${names.slice(0,3).map(n=>`<span class="tag">${esc(n)}</span>`).join('')}${names.length>3?`<span class="tag">+${names.length-3}</span>`:''}</div>
+        ${!names.length?`<span style="color:var(--gray-400);font-size:12px">אין עדיין</span>`:''}
+      </td>
+      <td>
+        <div class="td-actions">
+          <button class="btn-icon" onclick="openEditFeature('${f.id}')" title="עריכה">✏️</button>
+          <button class="btn-icon" onclick="openAssign('${f.id}')" title="שיוך לקוחות">👥</button>
+          <button class="btn-icon danger" onclick="deleteFeature('${f.id}')" title="מחיקה">🗑️</button>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+
+  mobile.innerHTML = list.map(f => {
+    const cnt = requests.filter(r=>r.featureId===f.id).length;
+    return `<div class="card" style="margin-bottom:10px; padding:14px">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px">
+        <strong>${esc(f.name)}</strong>
+        ${statusBadge(f.status)}
+      </div>
+      ${f.description?`<div style="font-size:12px;color:var(--gray-500);margin-bottom:8px">${esc(f.description)}</div>`:''}
+      <div style="font-size:12px;color:var(--gray-600);margin-bottom:10px">${CAT_LABELS[f.category]||''} · ${cnt} לקוחות</div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-secondary btn-sm" onclick="openEditFeature('${f.id}')">✏️ עריכה</button>
+        <button class="btn btn-secondary btn-sm" onclick="openAssign('${f.id}')">👥 שיוך</button>
+        <button class="btn btn-sm" style="background:var(--red-bg);color:var(--red)" onclick="deleteFeature('${f.id}')">🗑️</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function addFeature() {
+  const name = document.getElementById('feat-name').value.trim();
+  if (!name) return alert('נא להזין שם פיצ\'ר');
+  features.push({
+    id: uid('f'), name,
+    description: document.getElementById('feat-desc').value.trim(),
+    status: document.getElementById('feat-status').value,
+    category: document.getElementById('feat-category').value,
+    createdAt: new Date().toISOString()
+  });
+  document.getElementById('feat-name').value = '';
+  document.getElementById('feat-desc').value = '';
+  saveLocal(); renderAll();
+  gsPost({ action:'saveFeatures', data: features });
+}
+
+function deleteFeature(id) {
+  if (!confirm('למחוק את הפיצ\'ר?')) return;
+  features = features.filter(f=>f.id!==id);
+  requests = requests.filter(r=>r.featureId!==id);
+  saveLocal(); renderAll();
+  gsPost({ action:'saveFeatures', data: features });
+  gsPost({ action:'saveRequests', data: requests });
+}
+
+function openEditFeature(id) {
+  const f = features.find(f=>f.id===id);
+  if (!f) return;
+  document.getElementById('ef-id').value       = id;
+  document.getElementById('ef-name').value     = f.name;
+  document.getElementById('ef-desc').value     = f.description||'';
+  document.getElementById('ef-status').value   = f.status;
+  document.getElementById('ef-category').value = f.category;
+  document.getElementById('modal-edit-feature').classList.add('active');
+}
+
+function saveEditFeature() {
+  const id = document.getElementById('ef-id').value;
+  const f  = features.find(f=>f.id===id);
+  if (!f) return;
+  const name = document.getElementById('ef-name').value.trim();
+  if (!name) return alert('נא להזין שם פיצ\'ר');
+  f.name        = name;
+  f.description = document.getElementById('ef-desc').value.trim();
+  f.status      = document.getElementById('ef-status').value;
+  f.category    = document.getElementById('ef-category').value;
+  closeModal('modal-edit-feature');
+  saveLocal(); renderAll();
+  gsPost({ action:'saveFeatures', data: features });
+}
+
+// ===== CUSTOMERS =====
+function renderCustomers() {
+  const q = (document.getElementById('search-customers')?.value||'').toLowerCase();
+  const list = customers.filter(c => !q || c.name.toLowerCase().includes(q) || (c.email||'').toLowerCase().includes(q) || (c.phone||'').includes(q));
+  const tbody = document.getElementById('customers-table');
+  const mobile = document.getElementById('customers-mobile');
+
+  if (syncTime) {
+    document.getElementById('sync-info').textContent = `סנכרון אחרון: ${new Date(syncTime).toLocaleString('he-IL')} · ${customers.length} לקוחות`;
+  }
+
+  if (!list.length) {
+    const empty = `<div class="no-data"><span class="no-data-icon">👥</span>${customers.length?'לא נמצאו תוצאות':'עדיין אין לקוחות — בצע סנכרון מ-Fireberry'}</div>`;
+    tbody.innerHTML  = `<tr><td colspan="6">${empty}</td></tr>`;
+    mobile.innerHTML = empty;
+    return;
+  }
+
+  tbody.innerHTML = list.map(c => {
+    const cnt = requests.filter(r=>r.customerId===c.id).length;
+    const src = c.source==='powerlink'||c.source==='fireberry' ? '🔥 Fireberry' : '✏️ ידני';
+    return `<tr>
+      <td><strong>${esc(c.name)}</strong></td>
+      <td>${esc(c.phone||'—')}</td>
+      <td>${esc(c.email||'—')}</td>
+      <td>${esc(c.accountNumber||'—')}</td>
+      <td><span style="font-size:12px">${src}</span></td>
+      <td><span class="badge badge-development">${cnt}</span></td>
+    </tr>`;
+  }).join('');
+
+  mobile.innerHTML = list.map(c => {
+    const cnt = requests.filter(r=>r.customerId===c.id).length;
+    const src = c.source==='powerlink'||c.source==='fireberry' ? '🔥 Fireberry' : '✏️ ידני';
+    return `<div class="card" style="margin-bottom:10px; padding:14px">
+      <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+        <strong>${esc(c.name)}</strong><span style="font-size:12px">${src}</span>
+      </div>
+      ${c.phone?`<div style="font-size:12px;color:var(--gray-500)">📞 ${esc(c.phone)}</div>`:''}
+      ${c.email?`<div style="font-size:12px;color:var(--gray-500)">✉️ ${esc(c.email)}</div>`:''}
+      <div style="font-size:12px;margin-top:6px;color:var(--blue)">💡 ${cnt} פיצ'רים מבוקשים</div>
+    </div>`;
+  }).join('');
+}
+
+async function syncCustomers() {
+  const btn = document.getElementById('sync-btn');
+  const info = document.getElementById('sync-info');
+  btn.disabled = true; btn.textContent = '⏳ מסנכרן...';
+  info.textContent = 'מתחיל סנכרון...';
+
+  try {
+    if (SCRIPT_URL.includes('YOUR_SCRIPT_ID')) throw new Error('יש להגדיר את SCRIPT_URL בקוד');
+    const res = await gsFetch(SCRIPT_URL + '?action=syncPowerlink');
+    if (!res.success) throw new Error(res.error || 'שגיאה בסנכרון');
+    const records = Array.isArray(res.data) ? res.data : [];
+    records.forEach(acc => {
+      const plId = acc.accountid;
+      const idx  = customers.findIndex(c=>c.powerlinkId===plId);
+      const obj  = { id: idx>=0?customers[idx].id:uid('c'), powerlinkId:plId,
+        name:acc.accountname||'ללא שם', phone:acc.telephone1||'', email:acc.emailaddress1||'',
+        accountNumber:acc.accountnumber||'', source:'fireberry' };
+      if (idx>=0) customers[idx]=obj; else customers.push(obj);
+    });
+    syncTime = new Date().toISOString();
+    saveLocal(); renderAll();
+    info.textContent = `סנכרון הושלם · ${records.length} לקוחות`;
+    gsPost({ action:'saveCustomers', data:customers, lastSync:syncTime });
+  } catch(e) {
+    info.textContent = 'שגיאה: ' + e.message;
+    alert('שגיאה בסנכרון: ' + e.message);
+  } finally {
+    btn.disabled=false; btn.textContent='🔄 סנכרון מ-Fireberry';
+  }
+}
+
+// ===== REQUESTS =====
+function renderRequests() {
+  const q = (document.getElementById('search-requests')?.value||'').toLowerCase();
+  const list = requests.filter(r => {
+    if (!q) return true;
+    const c = customers.find(c=>c.id===r.customerId);
+    const f = features.find(f=>f.id===r.featureId);
+    return (c&&c.name.toLowerCase().includes(q)) || (f&&f.name.toLowerCase().includes(q)) || (r.notes||'').toLowerCase().includes(q);
+  });
+  const tbody = document.getElementById('requests-table');
+  const mobile = document.getElementById('requests-mobile');
+
+  if (!list.length) {
+    const empty = `<div class="no-data"><span class="no-data-icon">📋</span>${requests.length?'לא נמצאו תוצאות':'עדיין אין בקשות — קשר לקוח לפיצ\'ר'}</div>`;
+    tbody.innerHTML  = `<tr><td colspan="6">${empty}</td></tr>`;
+    mobile.innerHTML = empty;
+    return;
+  }
+
+  tbody.innerHTML = list.map(r => {
+    const c = customers.find(c=>c.id===r.customerId);
+    const f = features.find(f=>f.id===r.featureId);
+    return `<tr>
+      <td><strong>${esc(c?c.name:'לא נמצא')}</strong></td>
+      <td>${esc(f?f.name:'לא נמצא')}</td>
+      <td>${priorityBadge(r.priority)}</td>
+      <td style="color:var(--gray-500)">${new Date(r.date).toLocaleDateString('he-IL')}</td>
+      <td style="color:var(--gray-500);max-width:160px">${esc(r.notes||'—')}</td>
+      <td>
+        <div class="td-actions">
+          <button class="btn-icon" onclick="openEditRequest('${r.id}')" title="עריכה">✏️</button>
+          <button class="btn-icon danger" onclick="deleteRequest('${r.id}')" title="מחיקה">🗑️</button>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+
+  mobile.innerHTML = list.map(r => {
+    const c = customers.find(c=>c.id===r.customerId);
+    const f = features.find(f=>f.id===r.featureId);
+    return `<div class="card" style="margin-bottom:10px; padding:14px">
+      <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+        <strong>${esc(c?c.name:'לא נמצא')}</strong>${priorityBadge(r.priority)}
+      </div>
+      <div style="font-size:12px;color:var(--blue);margin-bottom:4px">💡 ${esc(f?f.name:'לא נמצא')}</div>
+      ${r.notes?`<div style="font-size:12px;color:var(--gray-500)">${esc(r.notes)}</div>`:''}
+      <div style="display:flex;gap:8px;margin-top:10px">
+        <button class="btn btn-secondary btn-sm" onclick="openEditRequest('${r.id}')">✏️ עריכה</button>
+        <button class="btn btn-sm" style="background:var(--red-bg);color:var(--red)" onclick="deleteRequest('${r.id}')">🗑️</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function populateSelects() {
+  // Datalist for customers
+  document.getElementById('req-customer-list').innerHTML = customers.map(c =>
+    `<option value="${esc(c.name)}">${esc(c.accountNumber?c.name+' ('+c.accountNumber+')':c.name)}</option>`
+  ).join('');
+
+  // Feature selects
+  const opts = features.map(f=>`<option value="${f.id}">${esc(f.name)}</option>`).join('');
+  document.getElementById('req-feature').innerHTML = '<option value="">בחר פיצ\'ר...</option>' + opts;
+  if (document.getElementById('er-feature'))
+    document.getElementById('er-feature').innerHTML = opts;
+}
+
+function onCustomerInput() {
+  const val = document.getElementById('req-customer-input').value.trim();
+  const c   = customers.find(c=>c.name===val);
+  document.getElementById('req-customer').value = c ? c.id : '';
+}
+
+function addRequest() {
+  const customerId = document.getElementById('req-customer').value;
+  const featureId  = document.getElementById('req-feature').value;
+  if (!customerId || !featureId) return alert('נא לבחור לקוח ופיצ\'ר');
+  if (requests.some(r=>r.customerId===customerId&&r.featureId===featureId)) return alert('בקשה זו כבר קיימת');
+  requests.push({
+    id: uid('r'), customerId, featureId,
+    priority: parseInt(document.getElementById('req-priority').value),
+    notes: document.getElementById('req-notes').value.trim(),
+    date: new Date().toISOString()
+  });
+  document.getElementById('req-customer-input').value = '';
+  document.getElementById('req-customer').value = '';
+  document.getElementById('req-notes').value = '';
+  saveLocal(); renderAll();
+  gsPost({ action:'saveRequests', data: requests });
+}
+
+function deleteRequest(id) {
+  if (!confirm('למחוק את הבקשה?')) return;
+  requests = requests.filter(r=>r.id!==id);
+  saveLocal(); renderAll();
+  gsPost({ action:'saveRequests', data: requests });
+}
+
+function openEditRequest(id) {
+  const r = requests.find(r=>r.id===id);
+  if (!r) return;
+  const c = customers.find(c=>c.id===r.customerId);
+  document.getElementById('er-id').value           = id;
+  document.getElementById('er-customer-name').value = c?c.name:'לא נמצא';
+  document.getElementById('er-priority').value     = r.priority;
+  document.getElementById('er-notes').value         = r.notes||'';
+  populateSelects();
+  document.getElementById('er-feature').value      = r.featureId;
+  document.getElementById('modal-edit-request').classList.add('active');
+}
+
+function saveEditRequest() {
+  const id = document.getElementById('er-id').value;
+  const r  = requests.find(r=>r.id===id);
+  if (!r) return;
+  r.featureId = document.getElementById('er-feature').value;
+  r.priority  = parseInt(document.getElementById('er-priority').value);
+  r.notes     = document.getElementById('er-notes').value.trim();
+  closeModal('modal-edit-request');
+  saveLocal(); renderAll();
+  gsPost({ action:'saveRequests', data: requests });
+}
+
+// ===== ASSIGN =====
+function openAssign(featureId) {
+  assignFeatId = featureId;
+  const f = features.find(f=>f.id===featureId);
+  document.getElementById('assign-feature-name').textContent = 'פיצ\'ר: ' + (f?f.name:'');
+  const assigned = requests.filter(r=>r.featureId===featureId).map(r=>r.customerId);
+  document.getElementById('assign-cb-list').innerHTML = customers.length
+    ? customers.map(c=>`
+        <label class="cb-item">
+          <input type="checkbox" value="${c.id}" ${assigned.includes(c.id)?'checked':''}>
+          <label>${esc(c.name)}${c.accountNumber?' ('+c.accountNumber+')':''}</label>
+        </label>`).join('')
+    : '<div style="padding:16px;color:var(--gray-400);text-align:center">אין לקוחות במערכת</div>';
+  document.getElementById('modal-assign').classList.add('active');
+}
+
+function saveAssignments() {
+  const cbs      = document.querySelectorAll('#assign-cb-list input[type="checkbox"]');
+  const selected = Array.from(cbs).filter(cb=>cb.checked).map(cb=>cb.value);
+  requests = requests.filter(r=>r.featureId!==assignFeatId);
+  selected.forEach(customerId => requests.push({
+    id: uid('r'), customerId, featureId: assignFeatId,
+    priority:3, notes:'', date: new Date().toISOString()
+  }));
+  closeModal('modal-assign');
+  saveLocal(); renderAll();
+  gsPost({ action:'saveRequests', data: requests });
+}
+
+// ===== CLOSE MODAL ON OVERLAY CLICK =====
+document.querySelectorAll('.modal-overlay').forEach(el => {
+  el.addEventListener('click', e => { if (e.target===el) el.classList.remove('active'); });
+});
+
+// ===== INIT =====
+const savedUser = sessionStorage.getItem('fr_user');
+if (savedUser) showApp(savedUser);
+</script>
+</body>
+</html>
