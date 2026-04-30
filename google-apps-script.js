@@ -1,30 +1,3 @@
-/*
-  ============================================================
-  VERSION: 3.0 - LOGIN + SERVER-SIDE SYNC
-  ============================================================
-  הוראות התקנה - Google Apps Script
-  ============================================================
-
-  1. צור Google Sheet חדש: https://sheets.new
-  2. הוסף 3 גיליונות (tabs) עם השמות הבאים בדיוק:
-     - customers
-     - features
-     - requests
-  3. בתפריט העליון: Extensions > Apps Script
-  4. מחק את כל הקוד הקיים והדבק את כל הקוד מקובץ זה
-  5. לחץ שמור (Ctrl+S)
-  6. לחץ Deploy > New deployment
-  7. בחר Type: Web app
-  8. הגדר:
-     - Execute as: Me
-     - Who has access: Anyone
-  9. לחץ Deploy
-  10. העתק את ה-URL שקיבלת והדבק אותו ב-index.html
-      במקום 'YOUR_GOOGLE_SCRIPT_URL_HERE'
-
-  ============================================================
-*/
-
 // ---- GET: Read all data ----
 function doGet(e) {
   try {
